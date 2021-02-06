@@ -1,0 +1,20 @@
+dn: dc=company,dc=org
+objectclass: top
+objectclass: domain
+objectclass: extensibleObject
+dc: company
+
+dn: ou=people,dc=company,dc=org
+objectclass: top
+objectclass: organizationalUnit
+ou: people
+
+dn: uid=ir45698,ou=people,dc=company,dc=org
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+objectclass: inetOrgPerson
+cn: Ismail Rzouki
+sn: Rzouki
+uid: ir45698
+userPassword: smapass
