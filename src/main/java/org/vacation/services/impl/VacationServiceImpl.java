@@ -5,18 +5,14 @@ import org.springframework.stereotype.Service;
 import org.vacation.beans.VacationDto;
 import org.vacation.filters.VacationFilter;
 import org.vacation.models.User;
-import org.vacation.models.Vacation;
-import org.vacation.repositories.IUserRepository;
 import org.vacation.repositories.IVacationRepository;
-import org.vacation.services.IUserService;
 import org.vacation.services.IVacationService;
-import org.vacation.transformers.Transformer;
 import org.vacation.transformers.VacationTransformerImpl;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
+import java.math.BigInteger;
 import java.util.List;
 import static java.util.stream.Collectors.toList;
 
@@ -86,7 +82,7 @@ public class VacationServiceImpl extends VacationCRUDServiceImpl implements IVac
 	 */
 	private List<VacationDto> buildVacationDtoList(List<Object[]> resultList) {
 		return resultList.stream()
-				  .map(objectArray -> new VacationDto((Long) objectArray[0], (String) objectArray[1], (Long) objectArray[3]))
+				  .map(objectArray -> new VacationDto(((BigInteger)objectArray[0]).longValue(), (String) objectArray[1], ((BigInteger) objectArray[2]).longValue()))
 				  .collect(toList());
 	}
 
