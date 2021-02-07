@@ -23,6 +23,9 @@ public class VacationDto {
 	@JsonProperty("end_date")
 	private String endDate;
 
+	@JsonProperty("status")
+	private int status;
+
 	@JsonProperty("user_id")
 	private Long userId;
 	

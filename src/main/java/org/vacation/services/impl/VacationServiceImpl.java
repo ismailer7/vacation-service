@@ -81,9 +81,23 @@ public class VacationServiceImpl extends VacationCRUDServiceImpl implements IVac
 	 * @return
 	 */
 	private List<VacationDto> buildVacationDtoList(List<Object[]> resultList) {
-		return resultList.stream()
-				  .map(objectArray -> new VacationDto(((BigInteger)objectArray[0]).longValue(), (String) objectArray[1], ((BigInteger) objectArray[2]).longValue()))
-				  .collect(toList());
+		/**
+		 * TODO fix the error with constructor.
+		 */
+		return resultList.stream().map(objectArray -> {
+			VacationDto vacationDto = new VacationDto();
+			Long vacationId = ((BigInteger) objectArray[0]).longValue();
+			String endDate = (String) objectArray[1];
+			String startDate = (String) objectArray[2];
+			int status = (Integer) objectArray[3];
+			String title = (String) objectArray[4];
+			vacationDto.setVacationId(vacationId);
+			vacationDto.setVacationTitle(title);
+			vacationDto.setStartDate(startDate);
+			vacationDto.setEndDate(endDate);
+			vacationDto.setStatus(status);
+			return vacationDto;
+		}).collect(toList());
 	}
 
 }

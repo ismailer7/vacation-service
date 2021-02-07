@@ -1,16 +1,15 @@
 package org.vacation.transformers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.vacation.beans.UserDto;
 import org.vacation.beans.VacationDto;
 import org.vacation.models.User;
 import org.vacation.models.Vacation;
-import org.vacation.repositories.IUserRepository;
-import org.vacation.services.IUserService;
 import org.vacation.services.impl.UserServiceImpl;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -23,7 +22,7 @@ public class VacationTransformerImpl extends Transformer<VacationDto, Vacation> 
     @Autowired
     private Transformer<UserDto, User> userTransformer;
 
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("DD/MM/YYYY");
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     @Override
     public VacationDto toDto(Vacation vacation) {
@@ -53,6 +52,19 @@ public class VacationTransformerImpl extends Transformer<VacationDto, Vacation> 
         User user = userTransformer.toEntity(userDto);
         vacation.setUser(user);
         vacation.setTitle(vacationDto.getVacationTitle());
+
+        String startDateString = vacationDto.getStartDate();
+        String endDateString = vacationDto.getEndDate();
+
+        try {
+            Date startDate = dateFormat.parse(startDateString);
+            Date endDate = dateFormat.parse(endDateString);
+            vacation.setStartDate(startDate);
+            vacation.setEndDate(endDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        vacation.setStatus(vacationDto.getStatus());
         return vacation;
     }
 }
