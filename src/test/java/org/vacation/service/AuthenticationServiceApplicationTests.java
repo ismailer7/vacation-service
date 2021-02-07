@@ -1,4 +1,4 @@
-package org.auth.service;
+package org.vacation.service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

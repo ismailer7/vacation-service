@@ -13,6 +13,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.lang.reflect.Field;
 import java.math.BigInteger;
+import java.util.Arrays;
 import java.util.List;
 import static java.util.stream.Collectors.toList;
 
@@ -50,10 +51,12 @@ public class VacationServiceImpl extends VacationCRUDServiceImpl implements IVac
 		/**
 		 * TODO read properties with reflection.
 		 * TODO Fix the error.
+		 * TODO check case where no value present - maybe we add default values to vacationFilter object.
 		 */
 		Class<?> c = vacationfilter.getClass();
 		for (Field field: c.getDeclaredFields()) {
 			String filedName = field.getName();
+			String wherePart = "";
 			switch(filedName) {
 				case "createdBy":
 					String createdBy = null;
@@ -64,11 +67,38 @@ public class VacationServiceImpl extends VacationCRUDServiceImpl implements IVac
 					}
 					User user = userService.findByUsername(createdBy);
 					Long createdById = user.getId();
-					String wherePart = String.format(" AND USER_ID = %s", createdById);
-					query.append(wherePart);
+					wherePart = String.format(" AND USER_ID = %s", createdById);
+					break;
+				case "status":
+					int status = -1;
+					try {
+						status = (int) field.get(vacationfilter);
+					} catch (IllegalAccessException e) {
+						throw new IllegalStateException("Error while reading field value: " + field.getName());
+					}
+					wherePart = String.format(" AND STATUS = %d", status);
+					break;
+				case "startDate":
+					String startDate = null;
+					try {
+						startDate = (String) field.get(vacationfilter);
+					} catch (IllegalAccessException e) {
+						throw new IllegalStateException("Error while reading field value: " + field.getName());
+					}
+					wherePart = String.format(" AND START_DATE >= %s" + startDate);
+					break;
+				case "endDate":
+					String endDate = null;
+					try {
+						endDate = (String) field.get(vacationfilter);
+					} catch (IllegalAccessException e) {
+						throw new IllegalStateException("Error while reading field value: " + field.getName());
+					}
+					wherePart = String.format(" AND END_DATE >= %s" + endDate);
+					break;
 			}
+			query.append(wherePart);
 		}
-
 		// execute query.
 		Query q = entityManager.createNativeQuery(query.toString());
 		List<Object[]> resultList = q.getResultList();
