@@ -11,6 +11,9 @@ import org.vacation.repositories.IUserRepository;
 import org.vacation.services.IUserService;
 import org.vacation.services.impl.UserServiceImpl;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 @Component
 public class VacationTransformerImpl extends Transformer<VacationDto, Vacation> {
 
@@ -20,11 +23,24 @@ public class VacationTransformerImpl extends Transformer<VacationDto, Vacation> 
     @Autowired
     private Transformer<UserDto, User> userTransformer;
 
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("DD/MM/YYYY");
+
     @Override
     public VacationDto toDto(Vacation vacation) {
         VacationDto vacationDto = new VacationDto();
         vacationDto.setVacationId(vacation.getId());
         vacationDto.setVacationTitle(vacation.getTitle());
+        Date startDate = vacation.getStartDate();
+        if(startDate != null) {
+            String startDateString = dateFormat.format(startDate);
+            vacationDto.setStartDate(startDateString);
+        }
+        Date endDate = vacation.getEndDate();
+        if(endDate != null) {
+            String endDateString = dateFormat.format(endDate);
+            vacationDto.setEndDate(endDateString);
+        }
+
         vacationDto.setUserId(vacation.getUser().getId());
         return vacationDto;
     }

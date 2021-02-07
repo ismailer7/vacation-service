@@ -17,6 +17,12 @@ public class VacationDto {
 	@JsonProperty("vacation_title")
 	private String vacationTitle;
 
+	@JsonProperty("start_date")
+	private String startDate;
+
+	@JsonProperty("end_date")
+	private String endDate;
+
 	@JsonProperty("user_id")
 	private Long userId;
 	
