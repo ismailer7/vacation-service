@@ -7,31 +7,69 @@ import org.json.simple.parser.ParseException;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import static org.mockito.Mockito.*;
 import org.mockito.Spy;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vacation.beans.VacationDto;
+import org.vacation.filters.VacationFilter;
+import org.vacation.models.User;
 import org.vacation.models.Vacation;
 import org.vacation.repositories.IVacationRepository;
+import org.vacation.services.impl.UserServiceImpl;
+import org.vacation.services.impl.VacationServiceImpl;
 import org.vacation.transformers.VacationTransformerImpl;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import java.io.*;
+import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+@RunWith(MockitoJUnitRunner.class)
 public class VacationServiceImplTest {
 
     private List<VacationDto> vacationDtoList = null;
+    private VacationFilter vacationFilter1 = null;
+    private User user = null;
+    private Object[] objs = new Object[] { new BigInteger("1256"), "01/01/2021", "15/12/2020", 1, "vacation title", 1l };
+    private List<Object[]> resultListMock = new ArrayList<>();
+
 
     @Mock
     private VacationTransformerImpl vacationTransformer;
+
+    @Mock
+    private EntityManager entityManagerMock;
+
+    @Mock
+    private Query queryMock;
+
+    @Mock
+    private UserServiceImpl userServiceMock;
+
+    @InjectMocks
+    private VacationServiceImpl vacationService;
 
     @Before
     public void setUp() throws ParseException {
         /**
          * TODO read file vacation and prepare list (can also store in db)
           */
+        resultListMock.add(objs);
+        vacationFilter1 = new VacationFilter();
+        vacationFilter1.setCreatedBy("ir45698");
+
+        user = new User();
+        user.setId(1l);
+        user.setUsername("testUser");
+
         JSONParser parser = new JSONParser();
         JSONObject jsonObject = new JSONObject();
 
@@ -68,6 +106,15 @@ public class VacationServiceImplTest {
         assertEquals(4, vacationDtoList.size());
     }
 
+    @Test
+    public void testFilter() {
+        when(userServiceMock.findByUsername(anyString())).thenReturn(user);
+        when(entityManagerMock.createNativeQuery(anyString())).thenReturn(queryMock);
+        when(queryMock.getResultList()).thenReturn(resultListMock);
+        List<VacationDto> vacationDtoList = vacationService.filter(vacationFilter1);
+        assertNotNull(vacationDtoList);
+        assertEquals(resultListMock.size(), vacationDtoList.size());
+    }
 
     private String readJsonResourceFileToString() throws IOException {
         InputStream inputStream = getClass().getResourceAsStream("/vacation_list");

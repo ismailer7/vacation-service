@@ -13,7 +13,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.lang.reflect.Field;
 import java.math.BigInteger;
-import java.util.Arrays;
 import java.util.List;
 import static java.util.stream.Collectors.toList;
 
@@ -63,38 +62,44 @@ public class VacationServiceImpl extends VacationCRUDServiceImpl implements IVac
 					try {
 						createdBy = (String) field.get(vacationfilter); // is username.
 					} catch (IllegalAccessException e) {
-						throw new IllegalStateException("Error while reading filed value: " + field.getName());
+						// throw new IllegalStateException("Error while reading filed value: " + field.getName());
+						continue;
 					}
-					User user = userService.findByUsername(createdBy);
-					Long createdById = user.getId();
-					wherePart = String.format(" AND USER_ID = %s", createdById);
+					if(createdBy != null) {
+						User user = userService.findByUsername(createdBy);
+						Long createdById = user.getId();
+						wherePart = String.format(" AND USER_ID = %s", createdById);
+					}
 					break;
 				case "status":
 					int status = -1;
 					try {
 						status = (int) field.get(vacationfilter);
 					} catch (IllegalAccessException e) {
-						throw new IllegalStateException("Error while reading field value: " + field.getName());
+						// throw new IllegalStateException("Error while reading field value: " + field.getName());
+						continue;
 					}
-					wherePart = String.format(" AND STATUS = %d", status);
+					if(status != -1) wherePart = String.format(" AND STATUS = %d", status);
 					break;
 				case "startDate":
 					String startDate = null;
 					try {
 						startDate = (String) field.get(vacationfilter);
 					} catch (IllegalAccessException e) {
-						throw new IllegalStateException("Error while reading field value: " + field.getName());
+						// throw new IllegalStateException("Error while reading field value: " + field.getName());
+						continue;
 					}
-					wherePart = String.format(" AND START_DATE >= %s" + startDate);
+					if(startDate != null) wherePart = String.format(" AND START_DATE >= %s", startDate);
 					break;
 				case "endDate":
 					String endDate = null;
 					try {
 						endDate = (String) field.get(vacationfilter);
 					} catch (IllegalAccessException e) {
-						throw new IllegalStateException("Error while reading field value: " + field.getName());
+						// throw new IllegalStateException("Error while reading field value: " + field.getName());
+						continue;
 					}
-					wherePart = String.format(" AND END_DATE >= %s" + endDate);
+					if(endDate != null) wherePart = String.format(" AND END_DATE <= %s", endDate);
 					break;
 			}
 			query.append(wherePart);
@@ -115,18 +120,13 @@ public class VacationServiceImpl extends VacationCRUDServiceImpl implements IVac
 		 * TODO fix the error with constructor.
 		 */
 		return resultList.stream().map(objectArray -> {
-			VacationDto vacationDto = new VacationDto();
 			Long vacationId = ((BigInteger) objectArray[0]).longValue();
 			String endDate = (String) objectArray[1];
 			String startDate = (String) objectArray[2];
 			int status = (Integer) objectArray[3];
 			String title = (String) objectArray[4];
-			vacationDto.setVacationId(vacationId);
-			vacationDto.setVacationTitle(title);
-			vacationDto.setStartDate(startDate);
-			vacationDto.setEndDate(endDate);
-			vacationDto.setStatus(status);
-			return vacationDto;
+			Long userId = (Long) objectArray[5];
+			return new VacationDto(vacationId, title, startDate, endDate, status, userId);
 		}).collect(toList());
 	}
 
