@@ -12,4 +12,6 @@ public interface IVacationService {
 	byte[] extractVacation(Long vacationId, int type);
 
 	List<VacationDto> filter(VacationFilter vacationfilter);
+
+	VacationDto assignVacationTo(Long vacationId, String username);
 }

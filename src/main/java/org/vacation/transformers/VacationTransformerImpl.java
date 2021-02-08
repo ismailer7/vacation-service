@@ -39,8 +39,9 @@ public class VacationTransformerImpl extends Transformer<VacationDto, Vacation> 
             String endDateString = dateFormat.format(endDate);
             vacationDto.setEndDate(endDateString);
         }
-
+        vacationDto.setStatus(vacation.getStatus());
         vacationDto.setUserId(vacation.getUser().getId());
+        vacationDto.setAssignment(vacation.getAssignment());
         return vacationDto;
     }
 
@@ -65,6 +66,7 @@ public class VacationTransformerImpl extends Transformer<VacationDto, Vacation> 
             e.printStackTrace();
         }
         vacation.setStatus(vacationDto.getStatus());
+        vacation.setAssignment(vacationDto.getAssignment());
         return vacation;
     }
 }

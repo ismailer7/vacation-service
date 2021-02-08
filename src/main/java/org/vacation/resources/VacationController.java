@@ -2,8 +2,11 @@ package org.vacation.resources;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.vacation.beans.AssignmentBean;
+import org.vacation.beans.UserDto;
 import org.vacation.filters.VacationFilter;
 import org.vacation.beans.VacationDto;
+import org.vacation.services.impl.UserServiceImpl;
 import org.vacation.services.impl.VacationServiceImpl;
 
 import java.util.List;
@@ -15,6 +18,9 @@ public class VacationController {
 	@Autowired
 	private VacationServiceImpl vacationService;
 
+	@Autowired
+	private UserServiceImpl userService;
+
 	@GetMapping("/test")
 	public String anotherTest() {
 		return "test vacation";
@@ -22,7 +28,10 @@ public class VacationController {
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
 	public VacationDto createVacationForm(@RequestBody VacationDto vacationForm) {
-			return vacationService.create(vacationForm);
+		Long userId = vacationForm.getUserId();
+		UserDto userDto = userService.getById(userId);
+		vacationForm.setAssignment(userDto.getUsername());
+		return vacationService.create(vacationForm);
 	}
 
 	@RequestMapping(value = "/modify/{vacationId}", method = RequestMethod.PUT)
@@ -42,15 +51,17 @@ public class VacationController {
 
 	@RequestMapping(value = "/vacations", method = RequestMethod.GET)
 	public List<VacationDto> retrieveVacations(@RequestBody VacationFilter vacationFilter) {
-		/**
-		 * TODO add retrieve feature.
-		 */
 		return vacationService.filter(vacationFilter);
 	}
 
 	@RequestMapping(value = "/extract/{type}/{vacationId}", method = RequestMethod.GET)
 	public byte[] extractVacation(@PathVariable("type") int type, @PathVariable("vacationId") Long vacationId) {
 		return vacationService.extractVacation(vacationId, type);
+	}
+
+	@RequestMapping(value = "/assignment")
+	private void assignTo(@RequestBody AssignmentBean assignmentBean) {
+		vacationService.assignVacationTo(assignmentBean.getVacationId(), assignmentBean.getAssignment());
 	}
 
 }

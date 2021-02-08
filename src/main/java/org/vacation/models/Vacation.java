@@ -34,4 +34,7 @@ public class Vacation {
 
 	@ManyToOne(optional = false)
 	private User user;
+
+	@Column(name = "ASSIGNMENT", nullable = false)
+	private String assignment;
 }

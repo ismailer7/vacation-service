@@ -51,21 +51,21 @@ public class VacationTransformerImplTest {
         vacation = new Vacation(1l, "vacation title test",
                     format.parse("10/02/2021"),
                     format.parse("22/02/2021"),
-                    status.ordinal(), user);
+                    status.ordinal(), user, "ir45698");
 
-        vacationDto = new VacationDto(12547l, "vacation dto title", "05/05/2020", "06/05/2021", 1, 10l);
+        vacationDto = new VacationDto(12547l, "vacation dto title", "05/05/2020", "06/05/2021", 1, 10l, "ir45698");
 
         vacationList = Arrays.asList(
                 vacation,
                 new Vacation(107l, "vacation title test 107",
                         format.parse("11/04/2021"),
                         format.parse("28/04/2021"),
-                        status.ordinal(), user)
+                        status.ordinal(), user, "ir45698")
         );
 
         vacationDtoList = Arrays.asList(
                 vacationDto,
-                new VacationDto(1547l, "vacation dto title test 1547", "01/08/2021", "31/08/2021", 1, 10l)
+                new VacationDto(1547l, "vacation dto title test 1547", "01/08/2021", "31/08/2021", 1, 10l, "ir45698")
         );
 
         when(userService.getById(anyLong())).thenReturn(new UserDto(10l, "testUser"));
@@ -74,13 +74,14 @@ public class VacationTransformerImplTest {
     @Test
     public void testToDto() {
         VacationDto vacationDto = vacationTransformer.toDto(vacation);
+        assertNotNull(vacationDto);
         assertEquals(vacation.getId(), (long) vacationDto.getVacationId());
         assertEquals(format.format(vacation.getStartDate()), vacationDto.getStartDate());
         assertEquals(format.format(vacation.getEndDate()), vacationDto.getEndDate());
         assertEquals(vacation.getTitle(), vacationDto.getVacationTitle());
         assertEquals(vacation.getStatus(), vacationDto.getStatus());
         assertEquals(vacation.getUser().getId(), vacationDto.getUserId());
-        assertNotNull(vacationDto);
+        assertEquals(vacation.getAssignment(), vacationDto.getAssignment());
     }
 
     @Test
@@ -92,6 +93,7 @@ public class VacationTransformerImplTest {
         assertEquals(vacationDto.getEndDate(), format.format(vacation.getEndDate()));
         assertEquals(vacationDto.getStatus(), vacation.getStatus());
         assertEquals(vacationDto.getUserId(), vacation.getUser().getId());
+        assertEquals(vacationDto.getAssignment(), vacation.getAssignment());
     }
 
     @Test
@@ -106,6 +108,7 @@ public class VacationTransformerImplTest {
             assertEquals(vacationDto.getEndDate(), format.format(vacationList.get(i).getEndDate()));
             assertEquals(vacationDto.getStatus(), vacationList.get(i).getStatus());
             assertEquals(vacationDto.getUserId(), vacationList.get(i).getUser().getId());
+            assertEquals(vacationDto.getAssignment(), vacationList.get(i).getAssignment());
             i ++;
         }
     }
@@ -121,6 +124,7 @@ public class VacationTransformerImplTest {
             assertEquals(vacationDtoList.get(i).getEndDate(), format.format(vacation.getEndDate()));
             assertEquals(vacationDtoList.get(i).getStatus(), vacation.getStatus());
             assertEquals(vacationDtoList.get(i).getUserId(), vacation.getUser().getId());
+            assertEquals(vacationDtoList.get(i).getAssignment(), vacation.getAssignment());
             i ++;
         }
     }

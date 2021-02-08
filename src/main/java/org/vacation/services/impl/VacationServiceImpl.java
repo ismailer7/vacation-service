@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.vacation.beans.VacationDto;
 import org.vacation.filters.VacationFilter;
 import org.vacation.models.User;
+import org.vacation.models.Vacation;
 import org.vacation.repositories.IVacationRepository;
 import org.vacation.services.IVacationService;
 import org.vacation.transformers.VacationTransformerImpl;
@@ -111,6 +112,26 @@ public class VacationServiceImpl extends VacationCRUDServiceImpl implements IVac
 		return vacationDtoList;
 	}
 
+	@Override
+	public VacationDto assignVacationTo(Long vacationId, String username) {
+		Vacation vacation = vacationRepository.getOne(vacationId);
+		vacation.setAssignment(username);
+		int status = vacation.getStatus();
+		switch (status) {
+			case 1: // created
+				User originalUser = vacation.getUser();
+				if(originalUser != null && originalUser.getUsername() != null && !originalUser.getUsername().equals(username)) {
+					vacation.setStatus(2); // pending approval.
+				}
+				break;
+			/**
+			 * TODO implement other scenarios.
+ 			 */
+		}
+		Vacation result = vacationRepository.saveAndFlush(vacation);
+		return vacationTransformer.toDto(result);
+	}
+
 	/**
 	 * @param resultList
 	 * @return
@@ -126,7 +147,7 @@ public class VacationServiceImpl extends VacationCRUDServiceImpl implements IVac
 			int status = (Integer) objectArray[3];
 			String title = (String) objectArray[4];
 			Long userId = (Long) objectArray[5];
-			return new VacationDto(vacationId, title, startDate, endDate, status, userId);
+			return new VacationDto(vacationId, title, startDate, endDate, status, userId, "ir45698");
 		}).collect(toList());
 	}
 

@@ -28,5 +28,8 @@ public class VacationDto {
 
 	@JsonProperty("user_id")
 	private Long userId;
+
+	@JsonProperty("assigned_to")
+	private String assignment;
 	
 }

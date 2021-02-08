@@ -7,7 +7,8 @@
             "vacation_title": "vacation title sample",
             "start_date": "07/02/2021",
             "end_date": "21/02/2021",
-            "status": 1
+            "status": 1,
+            "assign_to": "ir45698"
         },
 
         {
@@ -16,7 +17,8 @@
             "vacation_title": "vacation title test1",
             "start_date": "02/02/2021",
             "end_date": "21/02/2021",
-            "status": 1
+            "status": 1,
+            "assign_to": "ir45698"
         },
 
         {
@@ -25,7 +27,8 @@
             "vacation_title": "vacation title test2",
             "start_date": "14/06/2021",
             "end_date": "14/07/2021",
-            "status": 1
+            "status": 1,
+            "assign_to": "ir45698"
         },
 
         {
@@ -34,7 +37,8 @@
             "vacation_title": "vacation title test3",
             "start_date": "017/02/2021",
             "end_date": "17/03/2021",
-            "status": 1
+            "status": 1,
+            "assign_to": "ir45698"
         }
     ]
 }
