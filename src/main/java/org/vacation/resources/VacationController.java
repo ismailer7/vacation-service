@@ -8,6 +8,7 @@ import org.vacation.filters.VacationFilter;
 import org.vacation.beans.VacationDto;
 import org.vacation.services.impl.UserServiceImpl;
 import org.vacation.services.impl.VacationServiceImpl;
+import org.vacation.utils.StatusEnum;
 
 import java.util.List;
 
@@ -31,6 +32,7 @@ public class VacationController {
 		Long userId = vacationForm.getUserId();
 		UserDto userDto = userService.getById(userId);
 		vacationForm.setAssignment(userDto.getUsername());
+		vacationForm.setStatus(StatusEnum.CREATED.ordinal());
 		return vacationService.create(vacationForm);
 	}
 

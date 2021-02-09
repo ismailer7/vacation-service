@@ -13,7 +13,10 @@ import org.vacation.beans.AuthenticationRequest;
 import org.vacation.beans.AuthenticationResponse;
 import org.vacation.beans.UserDto;
 import org.vacation.services.JwtUserService;
+import org.vacation.services.LdapDirectoryService;
 import org.vacation.utils.JwtUtil;
+
+import java.util.List;
 
 @RestController
 public class AuthenticationController {

@@ -7,9 +7,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.vacation.beans.UserDto;
 import org.vacation.filters.UserFilter;
+import org.vacation.models.User;
+
+import java.util.Arrays;
+import java.util.List;
 
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/administration")
 public class AdministrationController {
 
 	// manage user - add user - delete user, provide access remove access change..
@@ -20,8 +24,8 @@ public class AdministrationController {
 	}
 	
 	@RequestMapping(value = "/getUsers", method = RequestMethod.GET)
-	public void getUsers(@RequestBody UserFilter userFilter) {
-		
+	public List<User> getUsers() {
+		return Arrays.asList(new User(1l, "userTest"));
 	}
 	
 	@RequestMapping(value = "/remove/{userId}")

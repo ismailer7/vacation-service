@@ -19,12 +19,15 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private JwtRequestFilter jwtRequestFilter;
-	
+
+	@Autowired
+	private CustomLdapAuthoritiesPopulator customLdapAuthoritiesPopulator;
+
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.ldapAuthentication()
 			.userDnPatterns("uid={0},ou=people")
-			.groupSearchBase("ou=people")
+			.groupSearchBase("ou=groups")
 			.contextSource()
 			.url("ldap://localhost:8389/dc=company,dc=org")
 			.and()
@@ -45,6 +48,11 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 				.authorizeRequests().antMatchers("/authenticate").permitAll()
 				.and()
 				.authorizeRequests().antMatchers("/h2-console/**").permitAll()
+				.and()
+				/**
+				 * TODO fix role mapping.
+				 */
+				.authorizeRequests().antMatchers("/administration/**").hasRole("USER")
 				.anyRequest().authenticated()
 				.and()
 				.exceptionHandling()

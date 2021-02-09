@@ -122,6 +122,7 @@ public class VacationServiceImpl extends VacationCRUDServiceImpl implements IVac
 				User originalUser = vacation.getUser();
 				if(originalUser != null && originalUser.getUsername() != null && !originalUser.getUsername().equals(username)) {
 					vacation.setStatus(2); // pending approval.
+					// notify the other user.
 				}
 				break;
 			/**

@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Table(name = "USER")
 @Entity
 @NoArgsConstructor
@@ -19,4 +21,12 @@ public class User {
 
 	@Column(name = "USERNAME", unique = true)
 	private String username;
+
+	@OneToMany
+	private List<Role> roles;
+
+	public User(Long id, String username) {
+		this.id = id;
+		this.username = username;
+	}
 }
