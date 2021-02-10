@@ -15,7 +15,8 @@ public class JwtUserService {
 	public UserDto loadUserByUsername(String username) {
 		UserDto userDto = new UserDto();
 		userDto.setUsername(username);
-		return userService.create(userDto);
+		//return userService.create(userDto);
+		return userDto;
 	}
 	
 }

@@ -5,7 +5,7 @@ import org.vacation.beans.RoleDto;
 import org.vacation.models.Role;
 
 @Component
-public class RoleTransformer extends Transformer<RoleDto, Role>{
+public class RoleTransformerImpl extends Transformer<RoleDto, Role>{
 
     @Override
     public RoleDto toDto(Role role) {

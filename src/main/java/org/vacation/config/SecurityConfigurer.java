@@ -49,7 +49,11 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 				/**
 				 * TODO fix role mapping.
 				 */
-				.authorizeRequests().antMatchers("/administration/**").hasRole("USER")
+				.authorizeRequests().antMatchers("/vacation/**").hasRole("USER")
+				.and()
+				.authorizeRequests().antMatchers("/notification/**").hasRole("USER")
+				.and()
+				.authorizeRequests().antMatchers("/administration/**").hasRole("ADMIN")
 				.anyRequest().authenticated()
 				.and()
 				.exceptionHandling()

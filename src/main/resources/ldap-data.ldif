@@ -24,10 +24,10 @@ sn: Rzouki
 uid: ir45698
 userPassword: smapass
 
-dn: cn=ADMIN,ou=groups,dc=company,dc=org
+dn: cn=USER,ou=groups,dc=company,dc=org
 objectClass: groupOfUniqueNames
 objectClass: top
-cn: ADMIN
+cn: USER
 uniqueMember: uid=ir45698,ou=people,dc=company,dc=org
 
 
