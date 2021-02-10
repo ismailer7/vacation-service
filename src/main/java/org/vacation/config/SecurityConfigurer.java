@@ -20,9 +20,6 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private JwtRequestFilter jwtRequestFilter;
 
-	@Autowired
-	private CustomLdapAuthoritiesPopulator customLdapAuthoritiesPopulator;
-
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.ldapAuthentication()

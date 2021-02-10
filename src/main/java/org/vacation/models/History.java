@@ -16,6 +16,8 @@ public class History {
 
     public final static String HISTORY_CREATED_MSG = "The Vacation Form has been Created";
     public final static String HISTORY_UPDATE_MSG = "Form Vacation Updated";
+    public final static String HISTORY_APPROVED_MSG = "Form Vacation has been Approved";
+    public final static String HISTORY_REJECTED_MSG = "Form Vacation has been Rejected";
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
